@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>xss rpc call2</title>
+    </head>
+    <body>
+        <script>
+            function xss_ajax(url, callback) {
+                var script_id = null
+                var script = document.createElement('script')
+                script.setAttribute('type', 'text/javascript')
+                script.setAttribute('src', url)
+                script.setAttribute('id', 'coolshell_script_id')
+                script.onload = script.onreadystatechange = function () {
+                    if (
+                        !this.readyState ||
+                        this.readyState === 'loaded' ||
+                        this.readyState === 'complete'
+                    ) {
+                        callback && callback()
+                    }
+                }
+                script_id = document.getElementById('coolshell_script_id')
+                if (script_id) {
+                    document.getElementsByTagName('head')[0].removeChild(script_id)
+                }
+                document.getElementsByTagName('head')[0].appendChild(script)
+            }
+
+            function xss_rpc_call(n, callback) {
+                var callbackName = 'xss_rpc_callback'
+                var url =
+                    'https://coolshell.cn/t.php?n=' + n + '&callback=' + callbackName
+                xss_ajax(url)
+                xss_rpc_callback = function (result) {
+                    var timeout = Math.round(Math.random() * 1000)
+                    callback &&
+                        setTimeout(function () {
+                            callback(result)
+                        }, timeout)
+                }
+            }
+
+            function xss_rpc_call2(n, callback) {
+                var callbackName =
+                    'xss_rpc_callback' + n + Math.round(Math.random() * 100000)
+                var url =
+                    'https://coolshell.cn/t.php?n=' + n + '&callback=' + callbackName
+                xss_ajax(url)
+                window[callbackName] = function (result) {
+                    var timeout = Math.round(Math.random() * 1000)
+                    callback &&
+                        setTimeout(function () {
+                            callback(result)
+                        }, timeout)
+                }
+            }
+
+            xss_rpc_call2(1, () => {
+                console.log(1)
+            })
+            xss_rpc_call2(1, () => {
+                console.log(1)
+            })
+            xss_rpc_call2(1, () => {
+                console.log(1)
+            })
+            xss_rpc_call2(1, () => {
+                console.log(1)
+            })
+            xss_rpc_call2(1, () => {
+                console.log(1)
+            })
+        </script>
+    </body>
+</html>
