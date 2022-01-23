@@ -1,5 +1,8 @@
 {
-  "dependencies": {
-    "@type-challenges/utils": "^0.1.1"
-  }
+    "scripts": {
+        "tsc": "tsc --lib 'ESNext, DOM, DOM.Iterable' --target 'ESNext'"
+    },
+    "dependencies": {
+        "@type-challenges/utils": "^0.1.1"
+    }
 }

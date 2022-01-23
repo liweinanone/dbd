@@ -33,14 +33,34 @@ for (let i = 0; i < total; i++) {
         results2[i] = result
 
         if (results2[nextVisit] !== undefined) {
-            console.log(`第 ${countTasks} 阶段`)
+            // console.log(`第 ${countTasks} 阶段`)
             countTasks++
-            // 如果这里是 results2[nextVisit], 那啥都不会 log, 真 tm 奇怪
-            // while (results2[nextVisit]) {
             while (results2[nextVisit] !== undefined) {
-                console.log(nextVisit + '->' + results2[nextVisit])
+                // console.log(nextVisit + '->' + results2[nextVisit])
                 nextVisit++
             }
         }
     })
 }
+
+// promise
+function delay(i: number) {
+    return new Promise<number>((resolve) => {
+        setTimeout(() => {
+            const result = i * 2
+
+            resolve(result)
+        }, 1000 * Math.random())
+    })
+}
+
+const requests: Promise<number>[] = new Array(total)
+
+for (let i = 0; i < total; i++) {
+    requests[i] = delay(i)
+}
+Promise.all(requests).then((response) => {
+    response.forEach((data, index) => {
+        console.log(index, '***', data)
+    })
+})
