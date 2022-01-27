@@ -18,7 +18,7 @@ function createStore(reducer, initState) {
         const cancelIndex = listens.push(callbackFn) - 1
 
         return function () {
-            if (listens.length === 0) {
+            if (listens[cancelIndex] !== callbackFn || listens.length === 0) {
                 return
             }
             listens.splice(cancelIndex, 1)
@@ -66,12 +66,15 @@ const user = createStore(reducer, {})
 const unsubscribe = user.subscribe(() => {
     console.log(user.getState())
 })
-
+user.subscribe(() => {
+    console.log('Second listen function')
+})
 user.dispatch({ type: 'add', payload: 'a' })
 user.dispatch({ type: 'add', payload: 'b' })
 user.dispatch({ type: 'add', payload: 'c' })
 user.dispatch({ type: 'delete', payload: 'a' })
 user.dispatch({ type: 'add', payload: 'd' })
+unsubscribe()
 unsubscribe()
 user.dispatch({ type: 'add', payload: 'f' })
 user.dispatch({ type: 'add', payload: 'e' })

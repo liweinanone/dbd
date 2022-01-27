@@ -1,13 +1,13 @@
 function debounce(callbackFn: Function, wait: number) {
-    let timerId: number
+    let timeoutId: number
 
     return function () {
-        // if (!timerId) {
+        // if (!timeoutId) {
         //     callbackFn(i)
         // }
 
-        clearTimeout(timerId)
-        timerId = setTimeout(callbackFn, wait)
+        clearTimeout(timeoutId)
+        timeoutId = setTimeout(callbackFn, wait)
     }
 }
 
@@ -19,5 +19,5 @@ const startTime = Date.now()
 for (let i = 0; i < 10; i++) {
     setTimeout(() => {
         click()
-    }, 100)
+    }, Math.floor(Math.random() * 100))
 }
