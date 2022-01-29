@@ -14,18 +14,18 @@ function _throttle(callbackFn, wait) {
 }
 function throttle(callback, wait) {
     var intervalID;
-    var isPending;
+    var isWorking;
     return function () {
-        isPending = true;
         if (!intervalID) {
+            isWorking = false;
             intervalID = setInterval(function () {
-                if (!isPending) {
+                if (isWorking) {
                     clearInterval(intervalID);
                     intervalID = undefined;
                     return;
                 }
-                isPending = false;
                 callback();
+                isWorking = true;
             }, wait);
         }
     };
@@ -34,12 +34,7 @@ exports.throttle = throttle;
 var click = throttle(function () {
     console.log(0);
 }, 1000);
-var click2 = throttle(function () {
-    console.log(2);
-}, 1000);
 click();
-click2();
 setTimeout(function () {
     click();
-    click2();
 }, 600);

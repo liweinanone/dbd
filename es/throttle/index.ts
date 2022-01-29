@@ -12,20 +12,20 @@ function _throttle(callbackFn: Function, wait: number) {
 }
 export function throttle(callback: Function, wait: number) {
     let intervalID: number | undefined
-    let isPending: boolean
+    let killInterval: boolean
 
     return function () {
-        isPending = true
         if (!intervalID) {
+            killInterval = false
             intervalID = setInterval(() => {
-                if (!isPending) {
+                if (killInterval) {
                     clearInterval(intervalID!)
                     intervalID = undefined
 
                     return
                 }
-                isPending = false
                 callback()
+                killInterval = true
             }, wait)
         }
     }
