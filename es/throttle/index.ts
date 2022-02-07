@@ -15,8 +15,8 @@ export function throttle(callback: Function, wait: number) {
     let killInterval: boolean
 
     return function () {
+        killInterval = false
         if (!intervalID) {
-            killInterval = false
             intervalID = setInterval(() => {
                 if (killInterval) {
                     clearInterval(intervalID!)
@@ -30,10 +30,10 @@ export function throttle(callback: Function, wait: number) {
         }
     }
 }
-const click = throttle(() => {
-    console.log(0)
-}, 1000)
-click()
-setTimeout(() => {
-    click()
-}, 600)
+
+window.addEventListener(
+    'resize',
+    throttle(() => {
+        console.log(window.innerWidth)
+    }, 250)
+)
